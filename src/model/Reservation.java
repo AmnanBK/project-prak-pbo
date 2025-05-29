@@ -22,7 +22,7 @@ public class Reservation {
     public int getGuestId() { return guestId; }
     public int getRoomId() { return roomId; }
     public Date getCheckInDate() { return checkInDate; }
-    public Date getChekOutDate() { return checkOutDate; }
+    public Date getCheckOutDate() { return checkOutDate; }
     
     // Setters
     public void setReservationId(int reservationId) { this.reservationId = reservationId; }
