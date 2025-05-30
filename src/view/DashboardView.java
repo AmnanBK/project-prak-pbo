@@ -47,6 +47,6 @@ public class DashboardView extends BaseView {
     }
     
     public void setBtnRoomDetailsListener (ActionListener listener) {
-        btnShowReservation.addActionListener(listener);
+        btnRoomDetails.addActionListener(listener);
     }
 }
