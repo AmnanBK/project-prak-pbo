@@ -65,8 +65,8 @@ public class AddReservationView extends BaseView {
         gbc.gridx = 0; gbc.gridwidth = 1;
 
         // Room
-        cbRoomType = new JComboBox<>(new String[]{"Standard", "Deluxe", "Suite"});
-        cbRoomNumber = new JComboBox<>(new String[]{"101", "102", "201"});
+        cbRoomType = new JComboBox<>(new String[]{"Standard", "Deluxe", "Suite", "Presidential"});
+        cbRoomNumber = new JComboBox<>();
 
         gbc.gridy = y++;
         formPanel.add(new JLabel("Room Type:"), gbc);
@@ -117,6 +117,7 @@ public class AddReservationView extends BaseView {
         dpCheckOut.addActionListener(e -> calculateDuration());
 
         add(formPanel, BorderLayout.CENTER);
+        cbRoomType.setSelectedItem("Standard");
         setVisible(true);
     }
     
@@ -161,6 +162,13 @@ public class AddReservationView extends BaseView {
     public void setEmail(String val) { tfEmail.setText(val); }
     public void setPhone(String val) { tfPhone.setText(val); }
     
+    public void setRoomNumberOptions(String[] roomNumbers) {
+        cbRoomNumber.removeAllItems();
+        for (String number : roomNumbers) {
+            cbRoomNumber.addItem(number);
+        }
+    }
+    
     // Setters for button listener
     public void setBtnSubmitListener(ActionListener listener) {
         btnSubmit.addActionListener(listener);
@@ -170,5 +178,9 @@ public class AddReservationView extends BaseView {
     }
     public void setBtnSearchListener(ActionListener listener) {
         btnSearch.addActionListener(listener);
+    }
+    // Setter for combobox roomtype change
+    public void setRoomTypeChangeListener(ActionListener listener) {
+        cbRoomType.addActionListener(listener);
     }
 }

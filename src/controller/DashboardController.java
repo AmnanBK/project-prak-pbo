@@ -22,6 +22,7 @@ public class DashboardController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddReservationView addView = new AddReservationView();
+                new AddReservationController(addView);
                 view.dispose();
             }
         });
