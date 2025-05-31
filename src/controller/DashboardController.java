@@ -30,6 +30,7 @@ public class DashboardController {
         view.setBtnShowReservationListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ShowReservationView showView = new ShowReservationView();
+                new ShowReservationController(showView);
                 view.dispose();
             }
         });
