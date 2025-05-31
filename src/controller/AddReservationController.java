@@ -23,6 +23,8 @@ public class AddReservationController {
     private RoomDAO roomDAO;
     private boolean guestExist = false;
     private List<Room> currentRoomList = new ArrayList<>();
+    private boolean isEditMode = false;
+    private int editingReservationId = -1;
 
     public AddReservationController(AddReservationView view) {
         this.view = view;
@@ -161,10 +163,10 @@ public class AddReservationController {
     }
 
     private int getRoomTypeIdFromName(String roomType) {
-        if (roomType.equals("Standard")) return 1;
-        else if (roomType.equals("Deluxe")) return 2;
-        else if (roomType.equals("Suite")) return 3;
-        else if (roomType.equals("Presidential")) return 4;
+        if (roomType.equals("Standard")) return 4;
+        else if (roomType.equals("Deluxe")) return 3;
+        else if (roomType.equals("Suite")) return 2;
+        else if (roomType.equals("Presidential")) return 1;
         return 0;
     }
 }
