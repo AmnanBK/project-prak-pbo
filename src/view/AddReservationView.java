@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Properties;
+import java.util.Calendar;
 
 import javax.swing.*;
 
@@ -161,6 +162,7 @@ public class AddReservationView extends BaseView {
     public void setLastName(String val) { tfLastName.setText(val); }
     public void setEmail(String val) { tfEmail.setText(val); }
     public void setPhone(String val) { tfPhone.setText(val); }
+    public void setGuestId(String val) { tfNIK.setText(val); }
     
     public void setRoomNumberOptions(String[] roomNumbers) {
         cbRoomNumber.removeAllItems();
@@ -182,5 +184,33 @@ public class AddReservationView extends BaseView {
     // Setter for combobox roomtype change
     public void setRoomTypeChangeListener(ActionListener listener) {
         cbRoomType.addActionListener(listener);
+    }
+    
+    public void setCheckInDate(java.util.Date date) {
+        if (date != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            UtilDateModel model = (UtilDateModel) dpCheckIn.getModel();
+            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            model.setSelected(true);
+        }
+    }
+
+    public void setCheckOutDate(java.util.Date date) {
+        if (date != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            UtilDateModel model = (UtilDateModel) dpCheckOut.getModel();
+            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            model.setSelected(true);
+        }
+    }
+    
+    public void setSelectedRoomType(String type) {
+        cbRoomType.setSelectedItem(type);
+    }
+
+    public void setSelectedRoomNumber(String number) {
+        cbRoomNumber.setSelectedItem(number);
     }
 }

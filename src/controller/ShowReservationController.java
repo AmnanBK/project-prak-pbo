@@ -4,6 +4,7 @@ import model.Reservation;
 import model.ReservationDAO;
 import view.DashboardView;
 import view.ShowReservationView;
+import view.AddReservationView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -88,8 +89,14 @@ public class ShowReservationController {
                     JOptionPane.showMessageDialog(view, "Please select a reservation to edit.");
                     return;
                 }
+                
+                int reservationId = reservationList.get(selectedRow).getReservationId();
+                Reservation reservation = reservationDAO.searchReservation(reservationId);
 
-                JOptionPane.showMessageDialog(view, "Edit functionality not implemented yet.");
+                AddReservationView editView = new AddReservationView();
+                new AddReservationController(editView, reservation);
+                view.dispose();
+
             }
         });
     }

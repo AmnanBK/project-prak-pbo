@@ -24,7 +24,7 @@ public class AddReservationController {
     private boolean guestExist = false;
     private List<Room> currentRoomList = new ArrayList<>();
     private boolean isEditMode = false;
-    private int editingReservationId = -1;
+    private Reservation reservationEdit;
 
     public AddReservationController(AddReservationView view) {
         this.view = view;
@@ -32,6 +32,19 @@ public class AddReservationController {
         this.reservationDAO = new ReservationDAO();
         this.roomDAO = new RoomDAO();
 
+        setRoomsChoice();
+        initController();
+    }
+    
+    public AddReservationController(AddReservationView view, Reservation reservation) {
+        this.view = view;
+        this.guestDAO = new GuestDAO();
+        this.reservationDAO = new ReservationDAO();
+        this.roomDAO = new RoomDAO();
+        this.reservationEdit = reservation;
+        this.isEditMode = true;
+        this.guestExist = true;
+        loadData();
         setRoomsChoice();
         initController();
     }
@@ -131,14 +144,32 @@ public class AddReservationController {
                 new java.sql.Date(checkOutDate.getTime())
             );
 
-            boolean success = reservationDAO.insert(reservation);
-            if (success) {
-                JOptionPane.showMessageDialog(view, "Reservation successful!");
-                view.dispose();
-                DashboardView dashboardView = new DashboardView();
-                new DashboardController(dashboardView);
+            if (!isEditMode) {                
+                boolean success = reservationDAO.insert(reservation);
+                if (success) {
+                    JOptionPane.showMessageDialog(view, "Reservation successful!");
+                    view.dispose();
+                    DashboardView dashboardView = new DashboardView();
+                    new DashboardController(dashboardView);
+                } else {
+                    JOptionPane.showMessageDialog(view, "Failed to save reservation.");
+                }
             } else {
-                JOptionPane.showMessageDialog(view, "Failed to save reservation.");
+                reservation.setReservationId(reservationEdit.getReservationId());
+                reservation.setGuestId(reservationEdit.getGuestId());
+                reservationDAO.updateRoom(reservationEdit.getRoomNumber());
+                
+                System.out.println(reservationEdit.getRoomId());
+
+                boolean success = reservationDAO.update(reservation);
+                if (success) {
+                    JOptionPane.showMessageDialog(view, "Reservation successfully edited");
+                    view.dispose();
+                    DashboardView dashboardView = new DashboardView();
+                    new DashboardController(dashboardView);
+                } else {
+                    JOptionPane.showMessageDialog(view, "Failed to edit reservation.");
+                }
             }
 
         } catch (NumberFormatException e) {
@@ -151,11 +182,20 @@ public class AddReservationController {
     private void setRoomsChoice() {
         String roomType = view.getRoomType();
         int roomTypeId = getRoomTypeIdFromName(roomType);
-
+        String selectedRoomNumber = null;
         try {
-            currentRoomList = roomDAO.getAvailableRoomsByType(roomTypeId);
+            if(isEditMode) {
+                currentRoomList = roomDAO.getAvailableRoomsByType(roomTypeId, reservationEdit.getRoomNumber());
+                selectedRoomNumber = reservationEdit.getRoomNumber();
+            } else {
+                currentRoomList = roomDAO.getAvailableRoomsByType(roomTypeId, "0");
+            }
             String[] roomNumbers = currentRoomList.stream().map(Room::getRoomNumber).toArray(String[]::new);
             view.setRoomNumberOptions(roomNumbers);
+            
+            if (isEditMode && selectedRoomNumber != null) {
+                view.setSelectedRoomNumber(selectedRoomNumber);
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(view, "Failed to load rooms: " + e.getMessage());
@@ -168,5 +208,16 @@ public class AddReservationController {
         else if (roomType.equals("Suite")) return 2;
         else if (roomType.equals("Presidential")) return 1;
         return 0;
+    }
+    
+    private void loadData() {
+        view.setFirstName(reservationEdit.getFirstName());
+        view.setLastName(reservationEdit.getLastName());
+        view.setEmail(reservationEdit.getEmail());
+        view.setPhone(reservationEdit.getPhoneNumber());
+        view.setCheckInDate(reservationEdit.getCheckInDate());
+        view.setCheckOutDate(reservationEdit.getCheckOutDate());
+        view.setGuestId(String.valueOf(reservationEdit.getGuestId()));
+        view.setSelectedRoomType(reservationEdit.getRoomType());
     }
 }

@@ -11,15 +11,16 @@ import util.DBUtil;
 
 public class RoomDAO {
     // Get All Room Available based on type
-    public List<Room> getAvailableRoomsByType(int roomTypeId) {
+    public List<Room> getAvailableRoomsByType(int roomTypeId, String roomNumber) {
         List<Room> rooms = new ArrayList<>();
-        String query = "SELECT * FROM room WHERE room_type_id = ? AND is_available = 1";
+        String query = "SELECT * FROM room WHERE (room_type_id = ? AND is_available = 1) OR room_number = ?";
         
         try {
             Connection conn = DBUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query);
             
             stmt.setInt(1, roomTypeId);
+            stmt.setString(2, roomNumber);
             
             ResultSet rs = stmt.executeQuery();
             

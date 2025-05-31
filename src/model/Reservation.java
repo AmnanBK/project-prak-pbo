@@ -12,7 +12,11 @@ public class Reservation {
     private String roomNumber;
     private int totalPrice;
     private boolean checkedOut;
-
+    private String firstName;
+    private String lastName;
+    private String roomType;
+    private String email;
+    private String phoneNumber;
     
     public Reservation(int reservationId, int guestId, int roomId, Date checkInDate, Date checkOutDate) {
         this.reservationId = reservationId;
@@ -23,14 +27,29 @@ public class Reservation {
     }
     
     public Reservation(int reservationId, String guestName, String roomNumber, Date checkInDate, Date checkOutDate, int totalPrice, boolean status) {
-     this.reservationId = reservationId;
-     this.guestName = guestName;
-     this.roomNumber = roomNumber;
-     this.checkInDate = checkInDate;
-     this.checkOutDate = checkOutDate;
-     this.totalPrice = totalPrice;
-     this.checkedOut = !status;
- }
+        this.reservationId = reservationId;
+        this.guestName = guestName;
+        this.roomNumber = roomNumber;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.totalPrice = totalPrice;
+        this.checkedOut = !status;
+    }
+    
+    public Reservation(int reservationId, int guestId, String firstName, String lastName, String email, String phoneNumber, String roomType, String roomNumber, Date checkInDate, Date checkOutDate) {
+        this.reservationId = reservationId;
+        this.guestName = guestName;
+        this.roomNumber = roomNumber;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.roomNumber = roomNumber;
+        this.roomType = roomType;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.guestId = guestId;
+    }
     
     // Getters
     public int getReservationId() { return reservationId; }
@@ -42,6 +61,11 @@ public class Reservation {
     public String getRoomNumber() { return roomNumber; }
     public int getTotalPrice() { return totalPrice; }
     public boolean isCheckedOut() { return checkedOut; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getEmail() { return email; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public String getRoomType() { return roomType; }
     
     // Setters
     public void setReservationId(int reservationId) { this.reservationId = reservationId; }
