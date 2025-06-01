@@ -185,10 +185,10 @@ public class AddReservationController {
         String selectedRoomNumber = null;
         try {
             if(isEditMode) {
-                currentRoomList = roomDAO.getAvailableRoomsByType(roomTypeId, reservationEdit.getRoomNumber());
+                currentRoomList = roomDAO.findAvailableRooms(roomTypeId, reservationEdit.getRoomNumber());
                 selectedRoomNumber = reservationEdit.getRoomNumber();
             } else {
-                currentRoomList = roomDAO.getAvailableRoomsByType(roomTypeId, "0");
+                currentRoomList = roomDAO.findAvailableRooms(roomTypeId, "0");
             }
             String[] roomNumbers = currentRoomList.stream().map(Room::getRoomNumber).toArray(String[]::new);
             view.setRoomNumberOptions(roomNumbers);

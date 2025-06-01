@@ -8,35 +8,7 @@ import java.sql.SQLException;
 import util.DBUtil;
 
 public class GuestDAO {
-    // Search guest by id
-    public Guest findById(int guestId) {
-        String query = "SELECT * FROM guest WHERE guest_id = ?";
-        
-        try {
-            Connection conn = DBUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query);
-            
-            stmt.setInt(1, guestId);
-            
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Guest(
-                        rs.getInt("guest_id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("email"),
-                        rs.getString("phone_number")
-                );
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Error finding guest: " + e.getMessage());
-        }
-        
-        return null;
-    }
-    
-    // Add new guest
+    // Create: Add new guest
     public boolean insert(Guest guest) {
         String query = "INSERT INTO guest (guest_id, first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?, ?)";
 
@@ -53,8 +25,34 @@ public class GuestDAO {
             return true;
 
         } catch (SQLException e) {
-            System.err.println("Insert guest failed: " + e.getMessage());
+            System.err.println("GuestDAO.insert failed: " + e.getMessage());
             return false;
         }
+    }
+
+    // Read: Search guest by id
+    public Guest findById(int guestId) {
+        String query = "SELECT * FROM guest WHERE guest_id = ?";
+        
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+
+            stmt.setInt(1, guestId);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Guest(
+                        rs.getInt("guest_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number")
+                );
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("GuestDAO.findById failed for guestId " + guestId + ": " + e.getMessage());
+        }
+        return null;
     }
 }
