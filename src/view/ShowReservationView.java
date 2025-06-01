@@ -68,11 +68,11 @@ public class ShowReservationView extends BaseView {
         return table.getSelectedRow();
     }
 
-    public void addRow(Object[] rowData) {
+    public void addRowReservation(Object[] rowData) {
         tableModel.addRow(rowData);
     }
 
-    public void clearTable() {
+    public void clearTableReservation() {
         tableModel.setRowCount(0);
     }
 

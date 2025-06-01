@@ -77,6 +77,29 @@ public class RoomDetailsController {
             }
         });
         
+        view.setBtnDeleteTypeListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRooomTypeRow = view.getSelectedRoomTypeRow();
+                if (selectedRooomTypeRow == -1) {
+                    JOptionPane.showMessageDialog(view, "Please select room type row first");
+                    return;
+                }
+                
+                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room type?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    int roomTypeId = roomList.get(selectedRooomTypeRow).getRoomTypeId();
+                    boolean deleted = roomTypeDAO.delete(roomTypeId);
+                    
+                    if (deleted) {
+                        JOptionPane.showMessageDialog(view, "Room type deleted successfully");
+                        loadData();
+                    } else {
+                        JOptionPane.showMessageDialog(view, "Failed to delete room");
+                    }
+                }
+            }
+        });
     }
     
     private void loadData() {

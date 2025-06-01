@@ -12,6 +12,12 @@ public class RoomDetailsView extends BaseView {
     private DefaultTableModel modelRoomTypes;
     private DefaultTableModel modelRooms;
 
+    // Tombol Room Type
+    private JButton btnAddType;
+    private JButton btnEditType;
+    private JButton btnDeleteType;
+
+    // Tombol Room
     private JButton btnBack;
     private JButton btnAdd;
     private JButton btnEdit;
@@ -24,27 +30,26 @@ public class RoomDetailsView extends BaseView {
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return false; // semua cell tidak bisa diedit
+            return false;
         }
     }
-    
+
     public RoomDetailsView() {
-        super("Room Details", 800, 600);
+        super("Room Details", 800, 650);
         setLayout(new BorderLayout());
-        
-        // ===========================
-        // Title
+
+        // =========================== Title
         JLabel lblTitle = new JLabel("Room Types and Room List", SwingConstants.CENTER);
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 20));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
         add(lblTitle, BorderLayout.NORTH);
 
-        // ===========================
-        // Panels
-        JPanel centerPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        // =========================== Center Section
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Room Types Table
+        // Table Room Type
         String[] columnRoomTypes = {"Room Type ID", "Type Name", "Price"};
         modelRoomTypes = new NonEditableTableModel(columnRoomTypes, 0);
         tableRoomTypes = new JTable(modelRoomTypes);
@@ -52,9 +57,18 @@ public class RoomDetailsView extends BaseView {
         scrollType.setBorder(BorderFactory.createTitledBorder("Room Types"));
         centerPanel.add(scrollType);
 
-        // Rooms Table
+        // Panel Tombol Room Type
+        JPanel panelRoomTypeButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        btnAddType = new JButton("Add Type");
+        btnEditType = new JButton("Edit Type");
+        btnDeleteType = new JButton("Delete Type");
+        panelRoomTypeButtons.add(btnAddType);
+        panelRoomTypeButtons.add(btnEditType);
+        panelRoomTypeButtons.add(btnDeleteType);
+        centerPanel.add(panelRoomTypeButtons);
+
+        // Table Rooms
         String[] columnRooms = {"Room ID", "Room Number", "Room Type", "Status"};
-        
         modelRooms = new NonEditableTableModel(columnRooms, 0);
         tableRooms = new JTable(modelRooms);
         JScrollPane scrollRoom = new JScrollPane(tableRooms);
@@ -63,13 +77,12 @@ public class RoomDetailsView extends BaseView {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        // ===========================
-        // Button Panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        // =========================== Bottom Buttons (for Room)
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         btnBack = new JButton("Back");
-        btnAdd = new JButton("Add");
-        btnEdit = new JButton("Edit");
-        btnDelete = new JButton("Delete");
+        btnAdd = new JButton("Add Room");
+        btnEdit = new JButton("Edit Room");
+        btnDelete = new JButton("Delete Room");
 
         buttonPanel.add(btnBack);
         buttonPanel.add(btnAdd);
@@ -81,9 +94,7 @@ public class RoomDetailsView extends BaseView {
         setVisible(true);
     }
 
-    // ========================
-    // Getters & Setters
-
+    // ======================== Table Manipulation
     public void addRoomTypeRow(Object[] rowData) {
         modelRoomTypes.addRow(rowData);
     }
@@ -116,9 +127,7 @@ public class RoomDetailsView extends BaseView {
         return tableRoomTypes;
     }
 
-    // ========================
-    // Button Listeners
-
+    // ======================== Button Listeners
     public void setBtnBackListener(ActionListener listener) {
         btnBack.addActionListener(listener);
     }
@@ -133,5 +142,17 @@ public class RoomDetailsView extends BaseView {
 
     public void setBtnDeleteListener(ActionListener listener) {
         btnDelete.addActionListener(listener);
+    }
+
+    public void setBtnAddTypeListener(ActionListener listener) {
+        btnAddType.addActionListener(listener);
+    }
+
+    public void setBtnEditTypeListener(ActionListener listener) {
+        btnEditType.addActionListener(listener);
+    }
+
+    public void setBtnDeleteTypeListener(ActionListener listener) {
+        btnDeleteType.addActionListener(listener);
     }
 }

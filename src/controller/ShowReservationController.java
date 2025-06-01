@@ -92,7 +92,7 @@ public class ShowReservationController {
                 
                 int reservationId = reservationList.get(selectedRow).getReservationId();
                 Reservation reservation = reservationDAO.searchReservation(reservationId);
-
+                System.out.println(reservation.getGuestId());
                 AddReservationView editView = new AddReservationView();
                 new AddReservationController(editView, reservation);
                 view.dispose();
@@ -112,12 +112,12 @@ public class ShowReservationController {
                     res.getTotalPrice(),
                     res.isCheckedOut() ? "Checked Out" : "Ongoing"
             };
-            view.addRow(row);
+            view.addRowReservation(row);
         }
     }
 
     private void reloadData() {
-        view.clearTable();
+        view.clearTableReservation();
         loadData();
     }
 }
