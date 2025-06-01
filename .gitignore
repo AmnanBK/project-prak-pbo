@@ -1,1 +1,38 @@
-/build/
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+
+# Compiled Java class files
+*.class
+
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment config
+.env
+
+# Backup and temp files
+*.tmp
+*.bak
+*.swp
+
+# VS Code (if ever used)
+.vscode/
+
+# Generated files
+out/
+
+# Java test results
+/test-output/
