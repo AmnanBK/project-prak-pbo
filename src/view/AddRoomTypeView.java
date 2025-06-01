@@ -1,15 +1,14 @@
 package view;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class AddRoomTypeView extends BaseView {
-
     private JTextField tfTypeName;
     private JTextField tfPrice;
     private JButton btnSubmit;
     private JButton btnCancel;
+
     private boolean isEditMode = false;
     private int editingId = -1;
 
@@ -17,6 +16,7 @@ public class AddRoomTypeView extends BaseView {
         super("Add Room Type", 400, 250);
         setLayout(null);
 
+        // Room type name
         JLabel lblTypeName = new JLabel("Room Type Name:");
         lblTypeName.setBounds(40, 30, 120, 25);
         add(lblTypeName);
@@ -25,6 +25,7 @@ public class AddRoomTypeView extends BaseView {
         tfTypeName.setBounds(170, 30, 170, 25);
         add(tfTypeName);
 
+        // Room type price
         JLabel lblPrice = new JLabel("Price:");
         lblPrice.setBounds(40, 70, 120, 25);
         add(lblPrice);
@@ -33,6 +34,7 @@ public class AddRoomTypeView extends BaseView {
         tfPrice.setBounds(170, 70, 170, 25);
         add(tfPrice);
 
+        // Buttons
         btnCancel = new JButton("Cancel");
         btnCancel.setBounds(80, 130, 100, 30);
         add(btnCancel);
@@ -44,48 +46,25 @@ public class AddRoomTypeView extends BaseView {
         setVisible(true);
     }
 
+    // Getters
     public String getRoomTypeName() {
         return tfTypeName.getText().trim();
     }
-
     public String getPrice() {
         return tfPrice.getText().trim();
     }
 
+    // Setters
+    public void setRoomTypeName(String name) { tfTypeName.setText(name); }
+    public void setPrice(String price) { tfPrice.setText(price); }
+
+    // Setter for action listener
     public void setBtnCancelListener(ActionListener listener) {
         btnCancel.addActionListener(listener);
     }
-
     public void setBtnSubmitListener(ActionListener listener) {
         btnSubmit.addActionListener(listener);
     }
 
-    public void clearForm() {
-        tfTypeName.setText("");
-        tfPrice.setText("");
-    }
-    
-    public void setFormData(String name, String price, int id) {
-        tfTypeName.setText(name);
-        tfPrice.setText(price);
-        isEditMode = true;
-        editingId = id;
-    }
-
-    public boolean isEditMode() {
-        return isEditMode;
-    }
-
-    public int getEditingId() {
-        return editingId;
-    }
-    
-    public void setRoomTypeName(String name) {
-        tfTypeName.setText(name);
-    }
-
-    public void setPrice(String price) {
-        tfPrice.setText(price);
-    }
     
 }
