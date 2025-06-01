@@ -2,8 +2,9 @@ package view;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Properties;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 
 import javax.swing.*;
 
@@ -12,74 +13,90 @@ import org.jdatepicker.impl.*;
 import util.DateLabelFormatter;
 
 public class AddReservationView extends BaseView {
-    private JTextField tfNIK, tfFirstName, tfLastName, tfEmail, tfPhone;
+    private JTextField tfId, tfFirstName, tfLastName, tfEmail, tfPhone;
     private JComboBox<String> cbRoomType, cbRoomNumber;
     private JDatePickerImpl dpCheckIn, dpCheckOut;
     private JLabel lblDuration;
     private JButton btnSubmit, btnBack, btnSearch;
-    
+
     public AddReservationView() {
-        super("Create Reservation", 500, 550);
-        setLayout(new BorderLayout());
+        super("Add Reservation", 500, 550);
+        setLayout(null);
 
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(6, 6, 6, 6);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
+        // Title
+        JLabel lblTitle = new JLabel("Add Reservation");
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 18));
+        lblTitle.setBounds(150, 10, 250, 30);
+        add(lblTitle);
 
-        int y = 0;
+        // Guest Id
+        JLabel lblId = new JLabel("Guest Id:");
+        lblId.setBounds(30, 60, 100, 25);
+        add(lblId);
 
-        // Input NIK and Search Button
-        gbc.gridy = y;
-        formPanel.add(new JLabel("Guest NIK:"), gbc);
-        tfNIK = new JTextField();
-        gbc.gridx = 1; formPanel.add(tfNIK, gbc);
+        tfId = new JTextField();
+        tfId.setBounds(130, 60, 200, 25);
+        add(tfId);
+
         btnSearch = new JButton("Search");
-        gbc.gridx = 2; formPanel.add(btnSearch, gbc);
-        y++; gbc.gridx = 0;
+        btnSearch.setBounds(340, 60, 100, 25);
+        add(btnSearch);
 
-        // Guest Data
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("First Name:"), gbc);
+        // Guest first name
+        JLabel lblFirst = new JLabel("First Name:");
+        lblFirst.setBounds(30, 100, 100, 25);
+        add(lblFirst);
+
         tfFirstName = new JTextField();
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(tfFirstName, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        tfFirstName.setBounds(130, 100, 250, 25);
+        add(tfFirstName);
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Last Name:"), gbc);
+        // Guest last name
+        JLabel lblLast = new JLabel("Last Name:");
+        lblLast.setBounds(30, 140, 100, 25);
+        add(lblLast);
+
         tfLastName = new JTextField();
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(tfLastName, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        tfLastName.setBounds(130, 140, 250, 25);
+        add(tfLastName);
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Email:"), gbc);
+        // Guest email
+        JLabel lblEmail = new JLabel("Email:");
+        lblEmail.setBounds(30, 180, 100, 25);
+        add(lblEmail);
+
         tfEmail = new JTextField();
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(tfEmail, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        tfEmail.setBounds(130, 180, 250, 25);
+        add(tfEmail);
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Phone Number:"), gbc);
+        // Guest phone number
+        JLabel lblPhone = new JLabel("Phone Number:");
+        lblPhone.setBounds(30, 220, 100, 25);
+        add(lblPhone);
+
         tfPhone = new JTextField();
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(tfPhone, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        tfPhone.setBounds(130, 220, 250, 25);
+        add(tfPhone);
 
-        // Room
+        // Choose room type
+        JLabel lblRoomType = new JLabel("Room Type:");
+        lblRoomType.setBounds(30, 260, 100, 25);
+        add(lblRoomType);
+
         cbRoomType = new JComboBox<>(new String[]{"Standard", "Deluxe", "Suite", "Presidential"});
+        cbRoomType.setBounds(130, 260, 250, 25);
+        add(cbRoomType);
+
+        // Choose room number
+        JLabel lblRoomNumber = new JLabel("Room Number:");
+        lblRoomNumber.setBounds(30, 300, 100, 25);
+        add(lblRoomNumber);
+
         cbRoomNumber = new JComboBox<>();
+        cbRoomNumber.setBounds(130, 300, 250, 25);
+        add(cbRoomNumber);
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Room Type:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(cbRoomType, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
-
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Room Number:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(cbRoomNumber, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
-
-        // Date Picker
+        // Date Picker Setup
         UtilDateModel modelIn = new UtilDateModel();
         UtilDateModel modelOut = new UtilDateModel();
         Properties p = new Properties();
@@ -90,38 +107,125 @@ public class AddReservationView extends BaseView {
         dpCheckIn = new JDatePickerImpl(new JDatePanelImpl(modelIn, p), new DateLabelFormatter());
         dpCheckOut = new JDatePickerImpl(new JDatePanelImpl(modelOut, p), new DateLabelFormatter());
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Check-in Date:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(dpCheckIn, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        // Choose date check in
+        JLabel lblCheckIn = new JLabel("Check-in Date:");
+        lblCheckIn.setBounds(30, 340, 100, 25);
+        add(lblCheckIn);
+        dpCheckIn.setBounds(130, 340, 250, 30);
+        add(dpCheckIn);
 
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Check-out Date:"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(dpCheckOut, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        // Choose date check out
+        JLabel lblCheckOut = new JLabel("Check-out Date:");
+        lblCheckOut.setBounds(30, 380, 100, 25);
+        add(lblCheckOut);
+        dpCheckOut.setBounds(130, 380, 250, 30);
+        add(dpCheckOut);
 
-        // Duration
+        // Show duration
+        JLabel lblDur = new JLabel("Duration (nights):");
+        lblDur.setBounds(30, 420, 120, 25);
+        add(lblDur);
         lblDuration = new JLabel("-");
-        gbc.gridy = y++;
-        formPanel.add(new JLabel("Duration (nights):"), gbc);
-        gbc.gridx = 1; gbc.gridwidth = 2; formPanel.add(lblDuration, gbc);
-        gbc.gridx = 0; gbc.gridwidth = 1;
+        lblDuration.setBounds(160, 420, 100, 25);
+        add(lblDuration);
 
-        // Buttons
+        // Button back
         btnBack = new JButton("Back");
-        btnSubmit = new JButton("Submit");
-        gbc.gridy = y++;
-        formPanel.add(btnBack, gbc);
-        gbc.gridx = 1; formPanel.add(btnSubmit, gbc);
+        btnBack.setBounds(130, 470, 100, 30);
+        add(btnBack);
 
-        // Listener auto update duration
+        // Button Submit
+        btnSubmit = new JButton("Submit");
+        btnSubmit.setBounds(250, 470, 100, 30);
+        add(btnSubmit);
+
+        // Calculate duration on check-out change
         dpCheckOut.addActionListener(e -> calculateDuration());
 
-        add(formPanel, BorderLayout.CENTER);
         cbRoomType.setSelectedItem("Standard");
         setVisible(true);
     }
-    
+
+
+    // Getters
+    public String getGuestId() { return tfId.getText().trim(); }
+    public String getFirstName() { return tfFirstName.getText().trim(); }
+    public String getLastName() { return tfLastName.getText().trim(); }
+    public String getEmail() { return tfEmail.getText().trim(); }
+    public String getPhone() { return tfPhone.getText().trim(); }
+    public String getRoomType() { return (String) cbRoomType.getSelectedItem(); }
+    public String getRoomNumber() { return (String) cbRoomNumber.getSelectedItem(); }
+    public Date getCheckInDate() {
+        return (Date) dpCheckIn.getModel().getValue();
+    }
+    public Date getCheckOutDate() {
+        return (Date) dpCheckOut.getModel().getValue();
+    }
+
+    // Setters
+    public void setGuestId(String val) { tfId.setText(val); }
+    public void setFirstName(String val) { tfFirstName.setText(val); }
+    public void setLastName(String val) { tfLastName.setText(val); }
+    public void setEmail(String val) { tfEmail.setText(val); }
+    public void setPhone(String val) { tfPhone.setText(val); }
+    public void setSelectedRoomType(String val) {
+        cbRoomType.setSelectedItem(val);
+    }
+    public void setSelectedRoomNumber(String val) {
+        cbRoomNumber.setSelectedItem(val);
+    }
+
+    public void setCheckInDate(Date date) {
+        if (date != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            UtilDateModel model = (UtilDateModel) dpCheckIn.getModel();
+            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            model.setSelected(true);
+        }
+    }
+
+    public void setCheckOutDate(Date date) {
+        if (date != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            UtilDateModel model = (UtilDateModel) dpCheckOut.getModel();
+            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+            model.setSelected(true);
+        }
+    }
+
+    // Setter for room type option
+    public void setRoomTypeOptions(String[] roomTypes) {
+        cbRoomType.removeAllItems();
+        for (String type : roomTypes) {
+            cbRoomType.addItem(type);
+        }
+    }
+
+    // Setter for room number option
+    public void setRoomNumberOptions(String[] roomNumbers) {
+        cbRoomNumber.removeAllItems();
+        for (String number : roomNumbers) {
+            cbRoomNumber.addItem(number);
+        }
+    }
+
+    // Setters for action listener
+    public void setBtnSubmitListener(ActionListener listener) {
+        btnSubmit.addActionListener(listener);
+    }
+    public void setBtnBackListener(ActionListener listener) {
+        btnBack.addActionListener(listener);
+    }
+    public void setBtnSearchListener(ActionListener listener) {
+        btnSearch.addActionListener(listener);
+    }
+    public void setRoomTypeChangeListener(ActionListener listener) {
+        cbRoomType.addActionListener(listener);
+    }
+
+    // Helper for calculate duration
     private void calculateDuration() {
         try {
             java.util.Date in = (java.util.Date) dpCheckIn.getModel().getValue();
@@ -137,80 +241,5 @@ public class AddReservationView extends BaseView {
         } catch (Exception e) {
             lblDuration.setText("-");
         }
-    }
-
-    // Getters
-    public String getGuestNIK() { return tfNIK.getText().trim(); }
-    public String getFirstName() { return tfFirstName.getText().trim(); }
-    public String getLastName() { return tfLastName.getText().trim(); }
-    public String getEmail() { return tfEmail.getText().trim(); }
-    public String getPhone() { return tfPhone.getText().trim(); }
-
-    public String getRoomType() { return (String) cbRoomType.getSelectedItem(); }
-    public String getRoomNumber() { return (String) cbRoomNumber.getSelectedItem(); }
-
-    public java.util.Date getCheckInDate() {
-        return (java.util.Date) dpCheckIn.getModel().getValue();
-    }
-
-    public java.util.Date getCheckOutDate() {
-        return (java.util.Date) dpCheckOut.getModel().getValue();
-    }
-
-    // Setters
-    public void setFirstName(String val) { tfFirstName.setText(val); }
-    public void setLastName(String val) { tfLastName.setText(val); }
-    public void setEmail(String val) { tfEmail.setText(val); }
-    public void setPhone(String val) { tfPhone.setText(val); }
-    public void setGuestId(String val) { tfNIK.setText(val); }
-    
-    public void setRoomNumberOptions(String[] roomNumbers) {
-        cbRoomNumber.removeAllItems();
-        for (String number : roomNumbers) {
-            cbRoomNumber.addItem(number);
-        }
-    }
-    
-    // Setters for button listener
-    public void setBtnSubmitListener(ActionListener listener) {
-        btnSubmit.addActionListener(listener);
-    }
-    public void setBtnBackListener(ActionListener listener) {
-        btnBack.addActionListener(listener);
-    }
-    public void setBtnSearchListener(ActionListener listener) {
-        btnSearch.addActionListener(listener);
-    }
-    // Setter for combobox roomtype change
-    public void setRoomTypeChangeListener(ActionListener listener) {
-        cbRoomType.addActionListener(listener);
-    }
-    
-    public void setCheckInDate(java.util.Date date) {
-        if (date != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            UtilDateModel model = (UtilDateModel) dpCheckIn.getModel();
-            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-            model.setSelected(true);
-        }
-    }
-
-    public void setCheckOutDate(java.util.Date date) {
-        if (date != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            UtilDateModel model = (UtilDateModel) dpCheckOut.getModel();
-            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-            model.setSelected(true);
-        }
-    }
-    
-    public void setSelectedRoomType(String type) {
-        cbRoomType.setSelectedItem(type);
-    }
-
-    public void setSelectedRoomNumber(String number) {
-        cbRoomNumber.setSelectedItem(number);
     }
 }

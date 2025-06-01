@@ -83,7 +83,7 @@ public class AddReservationController {
 
     private void searchGuest() {
         try {
-            int guestId = Integer.parseInt(view.getGuestNIK());
+            int guestId = Integer.parseInt(view.getGuestId());
             Guest guest = guestDAO.findById(guestId);
             if (guest != null) {
                 view.setFirstName(guest.getFirstName());
@@ -102,7 +102,7 @@ public class AddReservationController {
 
     private void submitReservation() {
         try {
-            int guestId = Integer.parseInt(view.getGuestNIK());
+            int guestId = Integer.parseInt(view.getGuestId());
             String firstName = view.getFirstName();
             String lastName = view.getLastName();
             String email = view.getEmail();

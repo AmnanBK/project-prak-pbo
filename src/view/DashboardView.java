@@ -13,13 +13,13 @@ public class DashboardView extends BaseView {
         super("Hotel Reservation", 400, 250);
         setLayout(new BorderLayout());
         
-        // Judul atas
+        // Title
         JLabel lblTitle = new JLabel("Hotel Reservation ", SwingConstants.CENTER);
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 18));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
         add(lblTitle, BorderLayout.NORTH);
 
-        // Panel tombol di tengah
+        // Center Button Panel
         JPanel panelButtons = new JPanel();
         panelButtons.setLayout(new GridLayout(3, 1, 10, 10));
         panelButtons.setBorder(BorderFactory.createEmptyBorder(10, 40, 20, 40));
@@ -37,8 +37,8 @@ public class DashboardView extends BaseView {
         setVisible(true);
     }
     
-    // Setter for button listener
-    public void setBtnAddReservationListener(ActionListener listener) {
+    // Setter for action listener
+    public void setBtnAddReservationListener (ActionListener listener) {
         btnAddReservation.addActionListener(listener);
     }
     
