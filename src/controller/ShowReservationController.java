@@ -71,7 +71,7 @@ public class ShowReservationController {
                     return;
                 }
 
-                boolean updated = reservationDAO.checkout(reservation.getReservationId());
+                boolean updated = reservationDAO.updateReservationStatus(reservation.getReservationId());
                 if (updated) {
                     JOptionPane.showMessageDialog(view, "Guest checked out successfully.");
                     reloadData();
@@ -91,7 +91,7 @@ public class ShowReservationController {
                 }
                 
                 int reservationId = reservationList.get(selectedRow).getReservationId();
-                Reservation reservation = reservationDAO.searchReservation(reservationId);
+                Reservation reservation = reservationDAO.findById(reservationId);
                 System.out.println(reservation.getGuestId());
                 AddReservationView editView = new AddReservationView();
                 new AddReservationController(editView, reservation);

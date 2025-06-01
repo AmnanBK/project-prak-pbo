@@ -157,7 +157,7 @@ public class AddReservationController {
             } else {
                 reservation.setReservationId(reservationEdit.getReservationId());
                 reservation.setGuestId(reservationEdit.getGuestId());
-                reservationDAO.updateRoom(reservationEdit.getRoomNumber());
+                roomDAO.updateRoomAvailability(reservationEdit.getRoomNumber(), true);
                 
                 System.out.println(reservationEdit.getRoomId());
 

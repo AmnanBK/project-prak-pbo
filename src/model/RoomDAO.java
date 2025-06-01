@@ -102,6 +102,24 @@ public class RoomDAO {
             return false;
         }
     }
+
+    // Update: Change room availability by room_number
+    public boolean updateRoomAvailability(String roomNumber, boolean isAvailable) {
+        String query = "UPDATE room SET is_available = ? WHERE room_number = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setBoolean(1, isAvailable);
+            stmt.setString(2, roomNumber);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("RoomDAO.updateRoomAvailability failed for roomId " + roomNumber + ": " + e.getMessage());
+            return false;
+        }
+    }
     
     // Delete: Remove room by id
     public boolean delete(int roomId) {
