@@ -37,7 +37,8 @@ public class DashboardController {
         
         view.setBtnRoomDetailsListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                RoomDetailsView RoomView = new RoomDetailsView();
+                RoomDetailsView roomView = new RoomDetailsView();
+                new RoomDetailsController(roomView);
                 view.dispose();
             }
         });
