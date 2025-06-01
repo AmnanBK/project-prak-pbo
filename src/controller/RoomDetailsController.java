@@ -46,6 +46,7 @@ public class RoomDetailsController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddRoomView addView = new AddRoomView();
+                new AddRoomController(addView);
             }
         });
         view.setBtnEditListener(new ActionListener() {
@@ -107,6 +108,7 @@ public class RoomDetailsController {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddRoomTypeView addTypeView = new AddRoomTypeView();
+                new AddRoomTypeController(addTypeView);
             }
         });
     }

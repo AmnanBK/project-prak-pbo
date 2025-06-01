@@ -56,7 +56,7 @@ public class RoomTypeDAO {
         
     // Insert new room type
     public boolean insert(RoomType roomType) {
-        String query = "INSERT INTO room_type (room_type_id, room_type_name, price) VALUES (?, ?, ?)";
+        String query = "INSERT INTO room_type (room_type_id, type_name, price) VALUES (?, ?, ?)";
         
         try (Connection conn = DBUtil.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {

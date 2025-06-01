@@ -42,7 +42,7 @@ public class AddRoomTypeView extends BaseView {
         setVisible(true);
     }
 
-    public String getTypeName() {
+    public String getRoomTypeName() {
         return tfTypeName.getText().trim();
     }
 
@@ -50,7 +50,7 @@ public class AddRoomTypeView extends BaseView {
         return tfPrice.getText().trim();
     }
 
-    public void setBtnCancelkListener(ActionListener listener) {
+    public void setBtnCancelListener(ActionListener listener) {
         btnCancel.addActionListener(listener);
     }
 
