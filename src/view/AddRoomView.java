@@ -73,4 +73,8 @@ public class AddRoomView extends BaseView {
     public void setBtnSubmitListener(ActionListener listener) {
         btnSubmit.addActionListener(listener);
     }
+    public void setRoomNumber(String number) {
+        tfRoomNumber.setText(number);
+    }
+    
 }

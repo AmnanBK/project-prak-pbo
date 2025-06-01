@@ -11,10 +11,24 @@ import java.awt.event.ActionListener;
 public class AddRoomTypeController {
     private AddRoomTypeView view;
     private RoomTypeDAO roomTypeDAO;
+    private RoomType existingRoomType;
 
     public AddRoomTypeController(AddRoomTypeView view) {
         this.view = view;
         this.roomTypeDAO = new RoomTypeDAO();
+
+        initController();
+    }
+    
+    public AddRoomTypeController(AddRoomTypeView view, RoomType roomType) {
+        this.view = view;
+        this.roomTypeDAO = new RoomTypeDAO();
+        this.existingRoomType = roomType;
+
+        if (existingRoomType != null) {
+            view.setRoomTypeName(existingRoomType.getTypeName());
+            view.setPrice(String.valueOf(existingRoomType.getPrice()));
+        }
 
         initController();
     }
@@ -47,18 +61,35 @@ public class AddRoomTypeController {
         try {
             int price = Integer.parseInt(priceText);
 
-            RoomType newType = new RoomType(0, typeName, price);
-            boolean success = roomTypeDAO.insert(newType);
+            if (existingRoomType != null) {
+                // Edit
+                existingRoomType.setTypeName(typeName);
+                existingRoomType.setPrice(price);
+                boolean success = roomTypeDAO.update(existingRoomType);
 
-            if (success) {
-                JOptionPane.showMessageDialog(view, "Room type added successfully.");
-                view.dispose();
+                if (success) {
+                    JOptionPane.showMessageDialog(view, "Room type updated successfully.");
+                    view.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(view, "Failed to update room type.");
+                }
+
             } else {
-                JOptionPane.showMessageDialog(view, "Failed to add room type.");
+                // Insert
+                RoomType newType = new RoomType(0, typeName, price);
+                boolean success = roomTypeDAO.insert(newType);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(view, "Room type added successfully.");
+                    view.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(view, "Failed to add room type.");
+                }
             }
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(view, "Price must be a valid number.");
         }
     }
+
 }

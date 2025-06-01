@@ -10,6 +10,8 @@ public class AddRoomTypeView extends BaseView {
     private JTextField tfPrice;
     private JButton btnSubmit;
     private JButton btnCancel;
+    private boolean isEditMode = false;
+    private int editingId = -1;
 
     public AddRoomTypeView() {
         super("Add Room Type", 400, 250);
@@ -62,4 +64,28 @@ public class AddRoomTypeView extends BaseView {
         tfTypeName.setText("");
         tfPrice.setText("");
     }
+    
+    public void setFormData(String name, String price, int id) {
+        tfTypeName.setText(name);
+        tfPrice.setText(price);
+        isEditMode = true;
+        editingId = id;
+    }
+
+    public boolean isEditMode() {
+        return isEditMode;
+    }
+
+    public int getEditingId() {
+        return editingId;
+    }
+    
+    public void setRoomTypeName(String name) {
+        tfTypeName.setText(name);
+    }
+
+    public void setPrice(String price) {
+        tfPrice.setText(price);
+    }
+    
 }

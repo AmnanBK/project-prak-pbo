@@ -52,9 +52,18 @@ public class RoomDetailsController {
         view.setBtnEditListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                int selectedRoomRow = view.getSelectedRoomRow();
+                if (selectedRoomRow == -1) {
+                    JOptionPane.showMessageDialog(view, "Please select a room to edit.");
+                    return;
+                }
+
+                Room selectedRoom = roomList.get(selectedRoomRow);
+                AddRoomView editView = new AddRoomView();
+                new AddRoomController(editView, selectedRoom); // gunakan mode edit
             }
         });
+
         
         view.setBtnDeleteListener(new ActionListener() {
             @Override
@@ -104,11 +113,18 @@ public class RoomDetailsController {
             }
         });
         
-        view.setBtnAddTypeListener(new ActionListener() {
+        view.setBtnEditTypeListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddRoomTypeView addTypeView = new AddRoomTypeView();
-                new AddRoomTypeController(addTypeView);
+                int selectedRow = view.getSelectedRoomTypeRow();
+                if (selectedRow == -1) {
+                    JOptionPane.showMessageDialog(view, "Please select a room type to edit.");
+                    return;
+                }
+
+                RoomType selectedRoomType = roomTypeList.get(selectedRow);
+                AddRoomTypeView editView = new AddRoomTypeView();
+                new AddRoomTypeController(editView, selectedRoomType);
             }
         });
     }

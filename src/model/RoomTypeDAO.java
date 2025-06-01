@@ -73,4 +73,47 @@ public class RoomTypeDAO {
             return false;
         }
     }
+    
+    // Update
+    public boolean update(RoomType roomType) {
+        String sql = "UPDATE room_type SET type_name = ?, price = ? WHERE room_type_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, roomType.getTypeName());
+            stmt.setInt(2, roomType.getPrice());
+            stmt.setInt(3, roomType.getRoomTypeId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Find by Id
+    public RoomType findById(int id) {
+        RoomType roomType = null;
+
+        String query = "SELECT * FROM room_type WHERE room_type_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int roomTypeId = rs.getInt("room_type_id");
+                String typeName = rs.getString("type_name");
+                int price = rs.getInt("price");
+
+                roomType = new RoomType(roomTypeId, typeName, price);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return roomType;
+    }
+
 }

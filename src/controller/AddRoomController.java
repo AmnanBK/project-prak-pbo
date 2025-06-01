@@ -26,6 +26,57 @@ public class AddRoomController {
         loadRoomTypes();
         initController();
     }
+    
+    public AddRoomController(AddRoomView view, Room existingRoom) {
+        this.view = view;
+        this.roomDAO = new RoomDAO();
+        this.roomTypeDAO = new RoomTypeDAO();
+
+        loadRoomTypes();
+
+        view.setRoomNumber(existingRoom.getRoomNumber());
+
+        String selectedTypeName = roomTypeDAO.findById(existingRoom.getRoomTypeId()).getTypeName();
+        view.setSelectedRoomType(selectedTypeName);
+
+        view.setBtnCancelListener(e -> view.dispose());
+
+        view.setBtnSubmitListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String roomNumber = view.getRoomNumber();
+                String selectedType = view.getSelectedRoomType();
+
+                if (roomNumber.isEmpty() || selectedType == null) {
+                    JOptionPane.showMessageDialog(view, "Please complete all fields.");
+                    return;
+                }
+
+                int roomTypeId = 0;
+                for (RoomType type : roomTypeList) {
+                    if (type.getTypeName().equals(selectedType)) {
+                        roomTypeId = type.getRoomTypeId();
+                        break;
+                    }
+                }
+
+                if (roomTypeId == 0) {
+                    JOptionPane.showMessageDialog(view, "Invalid room type.");
+                    return;
+                }
+
+                Room updatedRoom = new Room(existingRoom.getRoomId(), roomTypeId, roomNumber, existingRoom.getIsAvailable());
+                boolean updated = roomDAO.update(updatedRoom);
+
+                if (updated) {
+                    JOptionPane.showMessageDialog(view, "Room updated successfully.");
+                    view.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(view, "Failed to update room.");
+                }
+            }
+        });
+    }
 
     private void initController() {
         view.setBtnCancelListener(new ActionListener() {

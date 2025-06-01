@@ -105,4 +105,20 @@ public class RoomDAO {
             return false;
         }
     }
+    
+    // Update
+    public boolean update(Room room) {
+        String sql = "UPDATE room SET room_number = ?, is_available = ?, room_type_id = ? WHERE room_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, room.getRoomNumber());
+            stmt.setBoolean(2, room.getIsAvailable());
+            stmt.setInt(3, room.getRoomTypeId());
+            stmt.setInt(4, room.getRoomId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
