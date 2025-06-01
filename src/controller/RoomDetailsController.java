@@ -13,6 +13,8 @@ import model.RoomType;
 import model.RoomTypeDAO;
 import view.DashboardView;
 import view.RoomDetailsView;
+import view.AddRoomView;
+import view.AddRoomTypeView;
 
 public class RoomDetailsController {
     private RoomDetailsView view;
@@ -43,7 +45,7 @@ public class RoomDetailsController {
         view.setBtnAddListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                AddRoomView addView = new AddRoomView();
             }
         });
         view.setBtnEditListener(new ActionListener() {
@@ -98,6 +100,13 @@ public class RoomDetailsController {
                         JOptionPane.showMessageDialog(view, "Failed to delete room");
                     }
                 }
+            }
+        });
+        
+        view.setBtnAddTypeListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddRoomTypeView addTypeView = new AddRoomTypeView();
             }
         });
     }
