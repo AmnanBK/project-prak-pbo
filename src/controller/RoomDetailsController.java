@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Room;
@@ -42,14 +41,14 @@ public class RoomDetailsController {
             }
         });
         
-        view.setBtnAddListener(new ActionListener() {
+        view.setBtnAddRoomListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddRoomView addView = new AddRoomView();
                 new AddRoomController(addView);
             }
         });
-        view.setBtnEditListener(new ActionListener() {
+        view.setBtnEditRoomListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRoomRow = view.getSelectedRoomRow();
@@ -65,7 +64,7 @@ public class RoomDetailsController {
         });
 
         
-        view.setBtnDeleteListener(new ActionListener() {
+        view.setBtnDeleteRoomListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRooomRow = view.getSelectedRoomRow();

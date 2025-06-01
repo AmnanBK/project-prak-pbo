@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class ShowReservationView extends BaseView {
-
     private JTable table;
     private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
@@ -68,33 +67,27 @@ public class ShowReservationView extends BaseView {
         return table.getSelectedRow();
     }
 
+    // Add row to reservation table
     public void addRowReservation(Object[] rowData) {
         tableModel.addRow(rowData);
     }
 
+    // Clear reservation table
     public void clearTableReservation() {
         tableModel.setRowCount(0);
     }
 
-    // Button listener setters
+    // Setter for action listener
     public void setBtnBackListener(ActionListener listener) {
         btnBack.addActionListener(listener);
     }
-
     public void setBtnEditListener(ActionListener listener) {
         btnEdit.addActionListener(listener);
     }
-
     public void setBtnCheckoutListener(ActionListener listener) {
         btnCheckout.addActionListener(listener);
     }
-
     public void setBtnDeleteListener(ActionListener listener) {
         btnDelete.addActionListener(listener);
-    }
-
-    // Table getter
-    public JTable getTable() {
-        return table;
     }
 }
