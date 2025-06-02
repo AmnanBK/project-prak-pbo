@@ -24,7 +24,6 @@ public class DashboardController {
 
     private void initAddReservationListener() {
         view.setBtnAddReservationListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 AddReservationView addReservationView = new AddReservationView();
                 new AddReservationController(addReservationView);

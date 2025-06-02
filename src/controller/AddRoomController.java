@@ -1,5 +1,10 @@
 package controller;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import model.Room;
 import model.RoomDAO;
 import model.RoomType;
@@ -7,91 +12,107 @@ import model.RoomTypeDAO;
 import view.AddRoomView;
 import view.RoomDetailsView;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
 public class AddRoomController {
     private AddRoomView view;
     private RoomDAO roomDAO;
     private RoomTypeDAO roomTypeDAO;
     private List<RoomType> roomTypeList;
+    private Room existingRoom;
+    private boolean isEditMode = false;
 
     public AddRoomController(AddRoomView view) {
-        this.view = view;
-        this.roomDAO = new RoomDAO();
-        this.roomTypeDAO = new RoomTypeDAO();
-
-        loadRoomTypes();
-        initController();
+        this(view, null);
     }
     
     public AddRoomController(AddRoomView view, Room existingRoom) {
         this.view = view;
         this.roomDAO = new RoomDAO();
         this.roomTypeDAO = new RoomTypeDAO();
+        this.existingRoom = existingRoom;
+        this.isEditMode = existingRoom != null;
 
         loadRoomTypes();
 
-        view.setRoomNumber(existingRoom.getRoomNumber());
+        if (isEditMode) {
+            String selectedTypeName = roomTypeDAO.findById(existingRoom.getRoomTypeId()).getTypeName();
+            view.setRoomNumber(existingRoom.getRoomNumber());
+            view.setSelectedRoomType(selectedTypeName);
+        }
 
-        String selectedTypeName = roomTypeDAO.findById(existingRoom.getRoomTypeId()).getTypeName();
-        view.setSelectedRoomType(selectedTypeName);
+        initController();
+    }
 
-        view.setBtnCancelListener(e -> view.dispose());
+    private void initController() {
+        initBtnCancelListener();
+        initBtnSubmitListener();
+    }
 
+    private void initBtnCancelListener() {
+        view.setBtnCancelListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                navigateToRoomDetailsView();
+            }
+        });
+    }
+
+    private void initBtnSubmitListener() {
         view.setBtnSubmitListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 String roomNumber = view.getRoomNumber();
-                String selectedType = view.getSelectedRoomType();
+                String selectedTypeName = view.getSelectedRoomType();
 
-                if (roomNumber.isEmpty() || selectedType == null) {
-                    JOptionPane.showMessageDialog(view, "Please complete all fields.");
+                if (roomNumber.isEmpty() || selectedTypeName == null) {
+                    showMessage("Please complete all fields.");
                     return;
                 }
 
                 int roomTypeId = 0;
                 for (RoomType type : roomTypeList) {
-                    if (type.getTypeName().equals(selectedType)) {
+                    if (type.getTypeName().equals(selectedTypeName)) {
                         roomTypeId = type.getRoomTypeId();
                         break;
                     }
                 }
 
                 if (roomTypeId == 0) {
-                    JOptionPane.showMessageDialog(view, "Invalid room type.");
+                    showMessage("Invalid room type.");
                     return;
                 }
 
-                Room updatedRoom = new Room(existingRoom.getRoomId(), roomTypeId, roomNumber, existingRoom.getIsAvailable());
-                boolean updated = roomDAO.update(updatedRoom);
-
-                if (updated) {
-                    JOptionPane.showMessageDialog(view, "Room updated successfully.");
-                    view.dispose();
+                if (isEditMode) {
+                    updateRoom(roomNumber, roomTypeId);
                 } else {
-                    JOptionPane.showMessageDialog(view, "Failed to update room.");
+                    insertRoom(roomNumber, roomTypeId);
                 }
             }
         });
     }
 
-    private void initController() {
-        view.setBtnCancelListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                view.dispose(); // Tutup jendela
-            }
-        });
+    private void updateRoom(String roomNumber, int roomTypeId) {
+        existingRoom.setRoomNumber(roomNumber);
+        existingRoom.setRoomTypeId(roomTypeId);
 
-        view.setBtnSubmitListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                submitRoom();
-            }
-        });
+        boolean success = roomDAO.update(existingRoom);
+
+        if (success) {
+            showMessage("Room updated successfully.");
+            navigateToRoomDetailsView();
+        } else {
+            showMessage("Failed to update room.");
+        }
+    }
+
+    private void insertRoom(String roomNumber, int roomTypeId) {
+        Room newRoom = new Room(0, roomTypeId, roomNumber, true);
+
+        boolean success = roomDAO.insert(newRoom);
+
+        if (success) {
+            showMessage("Room added successfully.");
+            navigateToRoomDetailsView();
+        } else {
+            showMessage("Failed to add room.");
+        }
     }
 
     private void loadRoomTypes() {
@@ -103,36 +124,13 @@ public class AddRoomController {
         view.setRoomTypeOptions(typeNames);
     }
 
-    private void submitRoom() {
-        String roomNumber = view.getRoomNumber();
-        String selectedTypeName = view.getSelectedRoomType();
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(view, message);
+    }
 
-        if (roomNumber.isEmpty() || selectedTypeName == null) {
-            JOptionPane.showMessageDialog(view, "Please complete all fields.");
-            return;
-        }
-
-        int roomTypeId = 0;
-        for (RoomType type : roomTypeList) {
-            if (type.getTypeName().equals(selectedTypeName)) {
-                roomTypeId = type.getRoomTypeId();
-                break;
-            }
-        }
-
-        if (roomTypeId == 0) {
-            JOptionPane.showMessageDialog(view, "Invalid room type.");
-            return;
-        }
-
-        Room newRoom = new Room(0, roomTypeId, roomNumber, true);
-        boolean inserted = roomDAO.insert(newRoom);
-
-        if (inserted) {
-            JOptionPane.showMessageDialog(view, "Room added successfully.");
-            view.dispose();
-        } else {
-            JOptionPane.showMessageDialog(view, "Failed to add room.");
-        }
+    private void navigateToRoomDetailsView() {
+        RoomDetailsView roomDetailsView = new RoomDetailsView();
+        new RoomDetailsController(roomDetailsView);
+        view.dispose();
     }
 }

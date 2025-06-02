@@ -48,7 +48,6 @@ public class AddRoomTypeController {
 
     private void initBtnSubmitListener() {
         view.setBtnSubmitListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 String typeName = view.getRoomTypeName();
                 String priceText = view.getPrice();
