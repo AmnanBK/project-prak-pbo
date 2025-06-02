@@ -41,9 +41,7 @@ public class AddRoomTypeController {
     private void initBtnCancelListener() {
         view.setBtnCancelListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                RoomDetailsView roomDetailsView = new RoomDetailsView();
-                new RoomDetailsController(roomDetailsView);
-                view.dispose();
+                navigateToRoomDetailsView();
             }
         });
     }
