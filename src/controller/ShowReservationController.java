@@ -1,18 +1,18 @@
 package controller;
 
-import model.Reservation;
-import model.ReservationDAO;
-import view.DashboardView;
-import view.ShowReservationView;
-import view.AddReservationView;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ShowReservationController {
+import model.Reservation;
+import model.ReservationDAO;
+import model.RoomDAO;
+import view.DashboardView;
+import view.ShowReservationView;
+import view.AddReservationView;
 
+public class ShowReservationController {
     private ShowReservationView view;
     private ReservationDAO reservationDAO;
     private List<Reservation> reservationList;
@@ -22,81 +22,100 @@ public class ShowReservationController {
         this.reservationDAO = new ReservationDAO();
 
         loadData();
+        initController();
+    }
 
+    private void initController() {
+        initBtnBackListener();
+        initBtnEditListener();
+        initBtnCheckoutListener();
+        initBtnDeleteListener();
+    }
+
+    private void initBtnBackListener() {
         view.setBtnBackListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
-                view.dispose();
                 DashboardView dashboardView = new DashboardView();
                 new DashboardController(dashboardView);
+                view.dispose();
             }
         });
+    }
 
-        view.setBtnDeleteListener(new ActionListener() {
-            @Override
+    private void initBtnEditListener() {
+        view.setBtnEditListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = view.getSelectedRow();
+
                 if (selectedRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select a row first.");
+                    showMessage("Please select a reservation to edit.");
+                    return;
+                }
+
+                int reservationId = reservationList.get(selectedRow).getReservationId();
+                Reservation selectedReservation = reservationDAO.findById(reservationId);
+
+                AddReservationView editView = new AddReservationView();
+                new AddReservationController(editView, selectedReservation);
+                view.dispose();
+            }
+        });
+    }
+
+    private void initBtnCheckoutListener() {
+        view.setBtnCheckoutListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = view.getSelectedRow();
+
+                if (selectedRow == -1) {
+                    showMessage("Please select a reservation to checkout.");
+                    return;
+                }
+
+                Reservation selectedReservation = reservationList.get(selectedRow);
+                String roomNumber = selectedReservation.getRoomNumber();
+
+                if (selectedReservation.isCheckedOut()) {
+                    showMessage("Guest already checked out.");
+                    return;
+                }
+
+                boolean reservationSuccess = reservationDAO.updateReservationStatus(selectedReservation.getReservationId());
+                boolean roomSuccess = new RoomDAO().updateRoomAvailability(roomNumber, true);
+
+                if (reservationSuccess && roomSuccess) {
+                    showMessage("Guest checked out successfully.");
+                    reloadData();
+                } else {
+                    showMessage("Failed to update status.");
+                }
+            }
+        });
+    }
+
+    private void initBtnDeleteListener() {
+        view.setBtnDeleteListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = view.getSelectedRow();
+
+                if (selectedRow == -1) {
+                    showMessage("Please select a reservation to delete.");
                     return;
                 }
 
                 int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this reservation?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
                 if (confirm == JOptionPane.YES_OPTION) {
                     int reservationId = reservationList.get(selectedRow).getReservationId();
-                    boolean deleted = reservationDAO.delete(reservationId);
+                    boolean success = reservationDAO.delete(reservationId);
 
-                    if (deleted) {
-                        JOptionPane.showMessageDialog(view, "Reservation deleted successfully.");
+                    if (success) {
+                        showMessage("Reservation deleted successfully.");
                         reloadData();
                     } else {
-                        JOptionPane.showMessageDialog(view, "Failed to delete reservation.");
+                        showMessage("Failed to delete reservation.");
                     }
                 }
-            }
-        });
-
-        view.setBtnCheckoutListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = view.getSelectedRow();
-                if (selectedRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select a reservation.");
-                    return;
-                }
-
-                Reservation reservation = reservationList.get(selectedRow);
-                if (reservation.isCheckedOut()) {
-                    JOptionPane.showMessageDialog(view, "Guest already checked out.");
-                    return;
-                }
-
-                boolean updated = reservationDAO.updateReservationStatus(reservation.getReservationId());
-                if (updated) {
-                    JOptionPane.showMessageDialog(view, "Guest checked out successfully.");
-                    reloadData();
-                } else {
-                    JOptionPane.showMessageDialog(view, "Failed to update status.");
-                }
-            }
-        });
-
-        view.setBtnEditListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRow = view.getSelectedRow();
-                if (selectedRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select a reservation to edit.");
-                    return;
-                }
-                
-                int reservationId = reservationList.get(selectedRow).getReservationId();
-                Reservation reservation = reservationDAO.findById(reservationId);
-                System.out.println(reservation.getGuestId());
-                AddReservationView editView = new AddReservationView();
-                new AddReservationController(editView, reservation);
-                view.dispose();
-
             }
         });
     }
@@ -119,5 +138,9 @@ public class ShowReservationController {
     private void reloadData() {
         view.clearTableReservation();
         loadData();
+    }
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(view, message);
     }
 }
