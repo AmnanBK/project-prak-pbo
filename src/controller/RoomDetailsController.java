@@ -181,19 +181,11 @@ public class RoomDetailsController {
             Object[] row = {
                 r.getRoomId(),
                 r.getRoomNumber(),
-                getRoomTypeName(r.getRoomTypeId()),
+                r.getRoomTypeName(),
                 status
             };
             view.addRoomRow(row);
         }
-    }
-    
-    private String getRoomTypeName(int roomTypeId) {
-        if (roomTypeId == 1) return "Presidential";
-        else if (roomTypeId == 2) return "Suite";
-        else if (roomTypeId == 3) return "Deluxe";
-        else if (roomTypeId == 4) return "Standard";
-        return "";
     }
 
     private void showMessage(String message) {

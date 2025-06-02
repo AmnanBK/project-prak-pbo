@@ -30,10 +30,12 @@ public class RoomDAO {
         }
     }
 
-    // Read: Find all rooms
+    // Read: Find all rooms and room type name
     public List<Room> findAll() {
         List<Room> rooms = new ArrayList<>();
-        String query = "SELECT * FROM room";
+        String query = "SELECT rm.room_id, rm.room_type_id, rm.room_number, rm.is_available, rt.type_name " +
+                "FROM room rm " +
+                "JOIN room_type rt ON rm.room_type_id = rt.room_type_id";
 
         try(Connection conn = DBUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -44,7 +46,8 @@ public class RoomDAO {
                         rs.getInt("room_id"),
                         rs.getInt("room_type_id"),
                         rs.getString("room_number"),
-                        rs.getBoolean("is_available")
+                        rs.getBoolean("is_available"),
+                        rs.getString("type_name")
                 );
                 rooms.add(room);
             }
