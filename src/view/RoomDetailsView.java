@@ -2,6 +2,7 @@ package view;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -49,6 +50,12 @@ public class RoomDetailsView extends BaseView {
         String[] columnRoomTypes = {"Room Type ID", "Type Name", "Price"};
         modelRoomTypes = new NonEditableTableModel(columnRoomTypes, 0);
         tableRoomTypes = new JTable(modelRoomTypes);
+
+        TableColumnModel typeColumnModel = tableRoomTypes.getColumnModel();
+        typeColumnModel.getColumn(0).setMaxWidth(0);
+        typeColumnModel.getColumn(0).setMinWidth(0);
+        typeColumnModel.getColumn(0).setPreferredWidth(0);
+
         JScrollPane scrollType = new JScrollPane(tableRoomTypes);
         scrollType.setBorder(BorderFactory.createTitledBorder("Room Types"));
         scrollType.setBounds(50, 70, 700, 150);
@@ -71,6 +78,12 @@ public class RoomDetailsView extends BaseView {
         String[] columnRooms = {"Room ID", "Room Number", "Room Type", "Status"};
         modelRooms = new NonEditableTableModel(columnRooms, 0);
         tableRooms = new JTable(modelRooms);
+
+        TableColumnModel roomColumnModel = tableRooms.getColumnModel();
+        roomColumnModel.getColumn(0).setMaxWidth(0);
+        roomColumnModel.getColumn(0).setMinWidth(0);
+        roomColumnModel.getColumn(0).setPreferredWidth(0);
+
         JScrollPane scrollRoom = new JScrollPane(tableRooms);
         scrollRoom.setBorder(BorderFactory.createTitledBorder("Room List"));
         scrollRoom.setBounds(50, 280, 700, 200);
