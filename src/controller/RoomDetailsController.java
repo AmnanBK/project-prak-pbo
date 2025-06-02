@@ -30,96 +30,44 @@ public class RoomDetailsController {
         loadData();
         initController();
     }
-    
+
     private void initController() {
+        initBtnBackListener();
+        initBtnAddTypeListener();
+        initBtnEditTypeListener();
+        initBtnDeleteTypeListener();
+        initBtnAddRoomListener();
+        initBtnEditRoomListener();
+        initBtnDeleteRoomListener();
+    }
+
+    private void initBtnBackListener() {
         view.setBtnBackListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 DashboardView dashboardView = new DashboardView();
                 new DashboardController(dashboardView);
                 view.dispose();
             }
         });
-        
-        view.setBtnAddRoomListener(new ActionListener() {
-            @Override
+    }
+
+    private void initBtnAddTypeListener() {
+        view.setBtnAddTypeListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                AddRoomView addView = new AddRoomView();
-                new AddRoomController(addView);
+                AddRoomTypeView addView = new AddRoomTypeView();
+                new AddRoomTypeController(addView);
                 view.dispose();
             }
         });
-        view.setBtnEditRoomListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRoomRow = view.getSelectedRoomRow();
-                if (selectedRoomRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select a room to edit.");
-                    return;
-                }
+    }
 
-                Room selectedRoom = roomList.get(selectedRoomRow);
-                AddRoomView editView = new AddRoomView();
-                new AddRoomController(editView, selectedRoom);
-                view.dispose();
-            }
-        });
-
-        
-        view.setBtnDeleteRoomListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRooomRow = view.getSelectedRoomRow();
-                if (selectedRooomRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select room row first");
-                    return;
-                }
-                
-                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    int roomId = roomList.get(selectedRooomRow).getRoomId();
-                    boolean deleted = roomDAO.delete(roomId);
-                    
-                    if (deleted) {
-                        JOptionPane.showMessageDialog(view, "Room deleted successfully");
-                        loadData();
-                    } else {
-                        JOptionPane.showMessageDialog(view, "Failed to delete room");
-                    }
-                }
-            }
-        });
-        
-        view.setBtnDeleteTypeListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int selectedRooomTypeRow = view.getSelectedRoomTypeRow();
-                if (selectedRooomTypeRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select room type row first");
-                    return;
-                }
-                
-                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room type?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    int roomTypeId = roomList.get(selectedRooomTypeRow).getRoomTypeId();
-                    boolean deleted = roomTypeDAO.delete(roomTypeId);
-                    
-                    if (deleted) {
-                        JOptionPane.showMessageDialog(view, "Room type deleted successfully");
-                        loadData();
-                    } else {
-                        JOptionPane.showMessageDialog(view, "Failed to delete room");
-                    }
-                }
-            }
-        });
-        
+    private void initBtnEditTypeListener() {
         view.setBtnEditTypeListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = view.getSelectedRoomTypeRow();
+
                 if (selectedRow == -1) {
-                    JOptionPane.showMessageDialog(view, "Please select a room type to edit.");
+                    showMessage("Please select a room type to edit.");
                     return;
                 }
 
@@ -129,12 +77,86 @@ public class RoomDetailsController {
                 view.dispose();
             }
         });
+    }
 
-        view.setBtnAddTypeListener(new ActionListener() {
+    private void initBtnDeleteTypeListener() {
+        view.setBtnDeleteTypeListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                AddRoomTypeView addView = new AddRoomTypeView();
-                new AddRoomTypeController(addView);
+                int selectedRoomTypeRow = view.getSelectedRoomTypeRow();
+
+                if (selectedRoomTypeRow == -1) {
+                    showMessage("Please select room type row first");
+                    return;
+                }
+
+                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room type?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    int roomTypeId = roomList.get(selectedRoomTypeRow).getRoomTypeId();
+                    boolean success = roomTypeDAO.delete(roomTypeId);
+
+                    if (success) {
+                        showMessage("Room type deleted successfully");
+                        loadData();
+                    } else {
+                        showMessage("Failed to delete room");
+                    }
+                }
+            }
+        });
+    }
+
+    private void initBtnAddRoomListener() {
+        view.setBtnAddRoomListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AddRoomView addView = new AddRoomView();
+                new AddRoomController(addView);
                 view.dispose();
+            }
+        });
+    }
+
+    private void initBtnEditRoomListener() {
+        view.setBtnEditRoomListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRoomRow = view.getSelectedRoomRow();
+
+                if (selectedRoomRow == -1) {
+                    showMessage("Please select a room to edit.");
+                    return;
+                }
+
+                Room selectedRoom = roomList.get(selectedRoomRow);
+                AddRoomView editView = new AddRoomView();
+                new AddRoomController(editView, selectedRoom);
+                view.dispose();
+            }
+        });
+    }
+
+    private void initBtnDeleteRoomListener() {
+        view.setBtnDeleteRoomListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int selectedRoomRow = view.getSelectedRoomRow();
+
+                if (selectedRoomRow == -1) {
+                    showMessage("Please select room row first");
+                    return;
+                }
+
+                int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    int roomId = roomList.get(selectedRoomRow).getRoomId();
+                    boolean success = roomDAO.delete(roomId);
+
+                    if (success) {
+                        showMessage("Room deleted successfully");
+                        loadData();
+                    } else {
+                        showMessage("Failed to delete room");
+                    }
+                }
             }
         });
     }
@@ -154,11 +176,13 @@ public class RoomDetailsController {
         }
         
         for (Room r : roomList) {
+            String status = r.getIsAvailable() ? "Free" : "Occupied";
+
             Object[] row = {
                 r.getRoomId(),
                 r.getRoomNumber(),
                 getRoomTypeName(r.getRoomTypeId()),
-                getRoomStatus(r.getIsAvailable())
+                status
             };
             view.addRoomRow(row);
         }
@@ -171,9 +195,8 @@ public class RoomDetailsController {
         else if (roomTypeId == 4) return "Standard";
         return "";
     }
-    
-    private String getRoomStatus(boolean status) {
-        if (status) return "Free";
-        else return "Ocuppied";
+
+    private void showMessage(String message) {
+        JOptionPane.showMessageDialog(view, message);
     }
 }
