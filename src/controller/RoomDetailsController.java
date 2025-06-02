@@ -46,6 +46,7 @@ public class RoomDetailsController {
             public void actionPerformed(ActionEvent e) {
                 AddRoomView addView = new AddRoomView();
                 new AddRoomController(addView);
+                view.dispose();
             }
         });
         view.setBtnEditRoomListener(new ActionListener() {
@@ -59,7 +60,8 @@ public class RoomDetailsController {
 
                 Room selectedRoom = roomList.get(selectedRoomRow);
                 AddRoomView editView = new AddRoomView();
-                new AddRoomController(editView, selectedRoom); // gunakan mode edit
+                new AddRoomController(editView, selectedRoom);
+                view.dispose();
             }
         });
 
@@ -124,6 +126,15 @@ public class RoomDetailsController {
                 RoomType selectedRoomType = roomTypeList.get(selectedRow);
                 AddRoomTypeView editView = new AddRoomTypeView();
                 new AddRoomTypeController(editView, selectedRoomType);
+                view.dispose();
+            }
+        });
+
+        view.setBtnAddTypeListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AddRoomTypeView addView = new AddRoomTypeView();
+                new AddRoomTypeController(addView);
+                view.dispose();
             }
         });
     }
