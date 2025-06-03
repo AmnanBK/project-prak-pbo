@@ -25,6 +25,7 @@ public class AddReservationController {
     private List<Room> currentRoomList = new ArrayList<>();
     private boolean isEditMode = false;
     private Reservation reservationEdit;
+    private String currentRoomNumber = "";
 
     public AddReservationController(AddReservationView view) {
         this.view = view;
@@ -44,6 +45,7 @@ public class AddReservationController {
         this.reservationEdit = reservation;
         this.isEditMode = true;
         this.guestExist = true;
+        this.currentRoomNumber = reservation.getRoomNumber();
         loadData();
         setRoomsChoice();
         initController();
@@ -146,7 +148,9 @@ public class AddReservationController {
 
             if (!isEditMode) {                
                 boolean success = reservationDAO.insert(reservation);
-                if (success) {
+                boolean roomSuccess =  roomDAO.updateRoomAvailability(view.getRoomNumber(), false);
+                System.out.println(reservation.getRoomNumber());
+                if (success && roomSuccess) {
                     JOptionPane.showMessageDialog(view, "Reservation successful!");
                     view.dispose();
                     DashboardView dashboardView = new DashboardView();
@@ -158,8 +162,7 @@ public class AddReservationController {
                 reservation.setReservationId(reservationEdit.getReservationId());
                 reservation.setGuestId(reservationEdit.getGuestId());
                 roomDAO.updateRoomAvailability(reservationEdit.getRoomNumber(), true);
-                
-                System.out.println(reservationEdit.getRoomId());
+                roomDAO.updateRoomAvailability(view.getRoomNumber(), false);
 
                 boolean success = reservationDAO.update(reservation);
                 if (success) {
