@@ -55,4 +55,25 @@ public class GuestDAO {
         }
         return null;
     }
+
+    // Create: Add new guest
+    public boolean update(Guest guest) {
+        String query = "UPDATE guest SET first_name = ?, last_name = ?, email = ?, phone_number = ? WHERE guest_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, guest.getFirstName());
+            stmt.setString(2, guest.getLastName());
+            stmt.setString(3, guest.getEmail());
+            stmt.setString(4, guest.getPhoneNumber());
+            stmt.setInt(5, guest.getGuestId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("GuestDAO.update failed for guestId " + guest.getGuestId() + ": " + e.getMessage());
+            return false;
+        }
+    }
 }

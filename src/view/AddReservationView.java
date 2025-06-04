@@ -83,7 +83,7 @@ public class AddReservationView extends BaseView {
         lblRoomType.setBounds(30, 260, 100, 25);
         add(lblRoomType);
 
-        cbRoomType = new JComboBox<>(new String[]{"Standard", "Deluxe", "Suite", "Presidential"});
+        cbRoomType = new JComboBox<>();
         cbRoomType.setBounds(130, 260, 250, 25);
         add(cbRoomType);
 
@@ -142,7 +142,6 @@ public class AddReservationView extends BaseView {
         // Calculate duration on check-out change
         dpCheckOut.addActionListener(e -> calculateDuration());
 
-        cbRoomType.setSelectedItem("Standard");
         setVisible(true);
     }
 
