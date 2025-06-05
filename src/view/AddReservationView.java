@@ -16,11 +16,11 @@ public class AddReservationView extends BaseView {
     private JTextField tfId, tfFirstName, tfLastName, tfEmail, tfPhone;
     private JComboBox<String> cbRoomType, cbRoomNumber;
     private JDatePickerImpl dpCheckIn, dpCheckOut;
-    private JLabel lblDuration;
+    private JLabel lblDuration,lblPrice;
     private JButton btnSubmit, btnBack, btnSearch;
 
     public AddReservationView() {
-        super("Add Reservation", 500, 550);
+        super("Add Reservation", 500, 580);
         setLayout(null);
 
         // Title
@@ -129,18 +129,27 @@ public class AddReservationView extends BaseView {
         lblDuration.setBounds(160, 420, 100, 25);
         add(lblDuration);
 
+        // Show Price
+        JLabel lblPri = new JLabel("Price:");
+        lblPri.setBounds(30, 450, 120, 25);
+        add(lblPri);
+        lblPrice = new JLabel("-");
+        lblPrice.setBounds(160, 450, 120, 25);
+        add(lblPrice);
+
         // Button back
         btnBack = new JButton("Back");
-        btnBack.setBounds(130, 470, 100, 30);
+        btnBack.setBounds(130, 490, 100, 30);
         add(btnBack);
 
         // Button Submit
         btnSubmit = new JButton("Submit");
-        btnSubmit.setBounds(250, 470, 100, 30);
+        btnSubmit.setBounds(250, 490, 100, 30);
         add(btnSubmit);
 
-        // Calculate duration on check-out change
+        // Calculate duration on check in and out change
         dpCheckOut.addActionListener(e -> calculateDuration());
+        dpCheckIn.addActionListener(e -> calculateDuration());
 
         setVisible(true);
     }
