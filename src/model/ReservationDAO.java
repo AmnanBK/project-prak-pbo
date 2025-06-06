@@ -13,7 +13,7 @@ import util.DBUtil;
 public class ReservationDAO {
     // Create: Add new reservationo
     public boolean insert(Reservation reservation) {
-        String query = "INSERT INTO reservation (reservation_id, guest_id, room_id, check_in_date, check_out_date, reservation_status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO reservation (reservation_id, guest_id, room_id, check_in_date, check_out_date, total_price, reservation_status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -23,7 +23,8 @@ public class ReservationDAO {
                 stmt.setInt(3, reservation.getRoomId());
                 stmt.setDate(4, new Date(reservation.getCheckInDate().getTime()));
                 stmt.setDate(5, new Date(reservation.getCheckOutDate().getTime()));
-                stmt.setBoolean(6, true);
+                stmt.setInt(6, reservation.getTotalPrice());
+                stmt.setBoolean(7, true);
 
                 stmt.executeUpdate();
                 return true;
@@ -37,7 +38,7 @@ public class ReservationDAO {
     // Read: Find all reservation data
     public List<Reservation> findAll() {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT r.reservation_id, g.first_name, g.last_name, rm.room_number, rt.price, " +
+        String query = "SELECT r.reservation_id, g.first_name, g.last_name, rm.room_number, r.total_price, " +
                 "r.check_in_date, r.check_out_date, r.reservation_status " +
                 "FROM reservation r " +
                 "JOIN guest g ON r.guest_id = g.guest_id " +
@@ -55,11 +56,7 @@ public class ReservationDAO {
                 Date checkIn = rs.getDate("check_in_date");
                 Date checkOut = rs.getDate("check_out_date");
                 boolean status = rs.getBoolean("reservation_status");
-                int pricePerNight = rs.getInt("price");
-
-                long diff = checkOut.getTime() - checkIn.getTime();
-                int nights = (int) (diff / (1000 * 60 * 60 * 24));
-                int totalPrice = nights * pricePerNight;
+                int totalPrice = rs.getInt("total_price");
 
                 Reservation reservation = new Reservation(
                         id,

@@ -23,12 +23,13 @@ public class Reservation {
     private boolean checkedOut;
 
     // Constructor: Basic reservation
-    public Reservation(int reservationId, int guestId, int roomId, Date checkInDate, Date checkOutDate) {
+    public Reservation(int reservationId, int guestId, int roomId, Date checkInDate, Date checkOutDate, int totalPrice) {
         this.reservationId = reservationId;
         this.guestId = guestId;
         this.roomId = roomId;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.totalPrice = totalPrice;
     }
 
     // Constructor: Display purposes with guest name and room number

@@ -165,6 +165,7 @@ public class AddReservationView extends BaseView {
     public Date getCheckOutDate() {
         return (Date) dpCheckOut.getModel().getValue();
     }
+    public String getPrice() { return lblPrice.getText().trim(); }
 
     // Setters
     public void setGuestId(String val) { tfId.setText(val); }

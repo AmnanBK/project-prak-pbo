@@ -30,6 +30,7 @@ public class AddReservationController {
     private boolean isEditMode = false;
     private Reservation reservationEdit;
     private String currentRoomNumber = "";
+    private int totalPrice = 0;
 
     public AddReservationController(AddReservationView view) {
         this.view = view;
@@ -158,7 +159,8 @@ public class AddReservationController {
                             guestId,
                             selectedRoom.getRoomId(),
                             new java.sql.Date(checkInDate.getTime()),
-                            new java.sql.Date(checkOutDate.getTime())
+                            new java.sql.Date(checkOutDate.getTime()),
+                            totalPrice
                     );
 
                     if (!isEditMode) {
@@ -283,6 +285,7 @@ public class AddReservationController {
 
         int totalPrice = (int) (nights * pricePerNight);
         view.setLblPrice("Rp " + totalPrice);
+        this.totalPrice = totalPrice;
     }
 
 
