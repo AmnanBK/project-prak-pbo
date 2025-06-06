@@ -163,6 +163,7 @@ public class RoomDetailsController {
     
     private void loadData() {
         view.clearRoomTable();
+        view.clearRoomTypeTable();
         roomList = roomDAO.findAll();
         roomTypeList = roomTypeDAO.findAll();
         
