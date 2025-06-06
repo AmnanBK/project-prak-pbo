@@ -92,7 +92,7 @@ public class RoomDetailsController {
                 int confirm = JOptionPane.showConfirmDialog(view, "Are you sure to delete this room type?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
 
                 if (confirm == JOptionPane.YES_OPTION) {
-                    int roomTypeId = roomList.get(selectedRoomTypeRow).getRoomTypeId();
+                    int roomTypeId = roomTypeList.get(selectedRoomTypeRow).getRoomTypeId();
                     boolean success = roomTypeDAO.delete(roomTypeId);
 
                     if (success) {
