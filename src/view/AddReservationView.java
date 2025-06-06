@@ -147,10 +147,6 @@ public class AddReservationView extends BaseView {
         btnSubmit.setBounds(250, 490, 100, 30);
         add(btnSubmit);
 
-        // Calculate duration on check in and out change
-        dpCheckOut.addActionListener(e -> calculateDuration());
-        dpCheckIn.addActionListener(e -> calculateDuration());
-
         setVisible(true);
     }
 
@@ -182,6 +178,8 @@ public class AddReservationView extends BaseView {
     public void setSelectedRoomNumber(String val) {
         cbRoomNumber.setSelectedItem(val);
     }
+    public void setLblDuration(String val) { lblDuration.setText(val); }
+    public void setLblPrice(String val) { lblPrice.setText(val); }
 
     public void setCheckInDate(Date date) {
         if (date != null) {
@@ -229,9 +227,9 @@ public class AddReservationView extends BaseView {
     public void setBtnSearchListener(ActionListener listener) {
         btnSearch.addActionListener(listener);
     }
-    public void setRoomTypeChangeListener(ActionListener listener) {
-        cbRoomType.addActionListener(listener);
-    }
+    public void setRoomTypeChangeListener(ActionListener listener) { cbRoomType.addActionListener(listener); }
+    public void setDpCheckInListener(ActionListener listener) { dpCheckIn.addActionListener(listener); }
+    public void setDpCheckOutListener(ActionListener listener) { dpCheckOut.addActionListener(listener); }
 
     // Helper for calculate duration
     private void calculateDuration() {

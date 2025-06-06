@@ -58,6 +58,8 @@ public class AddReservationController {
         initBtnBackListener();
         initBtnSubmitListener();
         initRoomTypeChangeListener();
+        initDpCheckInListener();
+        initDpCheckOutListener();
     }
 
     private void initBtnSearchListener() {
@@ -200,8 +202,9 @@ public class AddReservationController {
     private void initRoomTypeChangeListener() {
         view.setRoomTypeChangeListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String roomType = view.getRoomType();
-                int roomTypeId = new RoomTypeDAO().findByName(roomType).getRoomTypeId();
+                String roomTypeName = view.getRoomType();
+                RoomType roomType = new RoomTypeDAO().findByName(roomTypeName);
+                int roomTypeId = roomType.getRoomTypeId();
 
                 String selectedRoomNumber = null;
 
@@ -223,6 +226,23 @@ public class AddReservationController {
                 } catch (Exception ex) {
                     showMessage("Failed to load rooms: " + ex.getMessage());
                 }
+                calculateDurationAndPrice();
+            }
+        });
+    }
+
+    private void initDpCheckInListener() {
+        view.setDpCheckInListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                calculateDurationAndPrice();
+            }
+        });
+    }
+
+    private void initDpCheckOutListener() {
+        view.setDpCheckOutListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                calculateDurationAndPrice();
             }
         });
     }
@@ -243,6 +263,28 @@ public class AddReservationController {
             view.setSelectedRoomType(reservationEdit.getRoomType());
         }
     }
+
+    private void calculateDurationAndPrice() {
+        Date checkIn = view.getCheckInDate();
+        Date checkOut = view.getCheckOutDate();
+        String roomTypeName = view.getRoomType();
+
+        if (checkIn == null || checkOut == null || checkIn.after(checkOut)) {
+            view.setLblDuration("-");
+            view.setLblPrice("-");
+            return;
+        }
+
+        long diff = checkOut.getTime() - checkIn.getTime();
+        long nights = diff / (1000 * 60 * 60 * 24);
+        view.setLblDuration(nights + " night(s)");
+
+        int pricePerNight = new RoomTypeDAO().getPriceByName(roomTypeName);
+
+        int totalPrice = (int) (nights * pricePerNight);
+        view.setLblPrice("Rp " + totalPrice);
+    }
+
 
     private void showMessage(String message) {
         JOptionPane.showMessageDialog(view, message);

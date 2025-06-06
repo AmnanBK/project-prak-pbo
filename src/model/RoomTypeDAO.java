@@ -78,6 +78,25 @@ public class RoomTypeDAO {
         return null;
     }
 
+    // Read: Get room type price by name
+    public int getPriceByName(String typeName) {
+        String query = "SELECT price FROM room_type WHERE type_name = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, typeName);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("price");
+            }
+        } catch (SQLException e) {
+            System.err.println("RoomTypeDAO.getPriceByName failed for roomTypeName " + typeName + ": " + e.getMessage());
+        }
+        return 0;
+    }
+
+
     // Read: Find all room types
     public List<RoomType> findAll() {
         List<RoomType> roomTypes = new ArrayList<>();
