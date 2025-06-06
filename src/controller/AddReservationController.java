@@ -112,6 +112,16 @@ public class AddReservationController {
                         return;
                     }
 
+                    if ((firstName + lastName).matches(".*\\d.*")) {
+                        JOptionPane.showMessageDialog(view, "Name should not contain numbers.");
+                        return;
+                    }
+
+                    if (phone.length() < 10) {
+                        showMessage("Phone number must be at least 10 digits long.");
+                        return;
+                    }
+
                     if (checkInDate == null || checkOutDate == null || checkInDate.after(checkOutDate) ) {
                         JOptionPane.showMessageDialog(view, "Please select valid check-in and check-out dates.");
                         return;
